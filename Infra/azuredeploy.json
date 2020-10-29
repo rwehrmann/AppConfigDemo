@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "defaultValue": "HelloWorld"
+    },
+    "rgName": {
+      "type": "string"
+    },
+    "rgLocation": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {}
+    },
+    "stageName": {
+      "defaultValue": "d",
+      "type": "String",
+      "allowedValues": [ "d", "t", "a", "p" ]
+    },
+    "namingFormat": {
+      "type": "string",
+      "defaultValue": "[toLower(concat(parameters('projectName'),'-{0}-', parameters('stageName')))]"
+    },
+    "appConfigurationName": {
+      "type": "string",
+      "defaultValue": "[format(parameters('namingFormat'),'appc')]"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.AppConfiguration/configurationStores",
+      "apiVersion": "2019-11-01-preview",
+      "name": "[parameters('appConfigurationName')]",
+      "location": "[parameters('rgLocation')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "standard"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "encryption": {}
+      }
+    }
+  ],
+  "outputs": {}
+}
