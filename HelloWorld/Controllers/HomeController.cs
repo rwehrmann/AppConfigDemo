@@ -1,26 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using System.Threading.Tasks;
 using HelloWorld.Models;
 
-namespace HelloWorld.Controllers
+namespace AppConfigDemo.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IFeatureManager _featureManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IFeatureManager featureManager)
         {
-            _logger = logger;
+            this._logger = logger;
+            this._featureManager = featureManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var demoFeatureEnabled = await this._featureManager.IsEnabledAsync(nameof(FeatureFlag.Demo));
+            var messageAboutFeature = demoFeatureEnabled ? "Demo feature is enabled" : "Demo feature is disabled";
+
+            var model = new DemoViewModel
+            {
+                Message = messageAboutFeature
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

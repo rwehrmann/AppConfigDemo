@@ -6,7 +6,7 @@ using Microsoft.FeatureManagement.Mvc;
 
 namespace AppConfigDemo.Controllers
 {
-    //[FeatureGate(FeatureFlag.Demo)]
+    [FeatureGate(FeatureFlag.Demo)]
     public class DemoController : Controller
     {
         private readonly ILogger<DemoController> _logger;
