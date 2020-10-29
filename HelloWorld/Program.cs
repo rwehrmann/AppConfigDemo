@@ -42,8 +42,6 @@ namespace HelloWorld
                 throw new ArgumentNullException(nameof(config));
             }
 
-            // Make sure we have AzureKeyVaultConfigurationProvider.
-            // This provider gives us access to the Azure App Configuration connectionstring (Endpoint)
             var configuration = config.Build();
             config.AddAzureAppConfiguration(options =>
             {
